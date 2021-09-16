@@ -32,11 +32,12 @@ class ShowPicker:
             picked = input("Pick a color: \n\t" + "\n\t".join(self.colors[:len(self.shows)]) + "\n").strip().capitalize()
             print(picked)
             if picked in self.colors[:len(self.shows)]:
-                print("Your show is: " + self.shows[self.colors.index(picked)] + "\n" * 5)
+                input("Your show is " + self.shows[self.colors.index(picked)] + ".\nPress enter to continue.")
             elif picked == "Exit":
                 break
             else:
-                input("Your selection, " + picked + ", was not found in the color list. Press enter to continue." + "\n" * 5)
+                input("Your selection, " + picked + ", was not found in the color list.\nPress enter to continue.")
+            print("\n" * 100)
 
     def menu(self):
         while True:
