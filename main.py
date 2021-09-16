@@ -14,7 +14,6 @@ import sys
 
 def load_file(location, target_file):
     try:
-        # self.shows = ["Aggretsuko", "Bobobo", "The Boys S2", "Mob Psycho 100 2"]
         return open(os.path.join(location, target_file)).read().splitlines()
     except IOError:
         print("File \"" + str(os.path.join(location, target_file)) + "\" not found.")
@@ -25,13 +24,6 @@ class ShowPicker:
     def __init__(self):
         self.shows = load_file("resources", "shows.txt")
         self.colors = load_file("resources", "colors.txt")
-
-        '''try:
-            self.colors = ["Teal", "Burgandy",  "Glaucous", "Orange", "Cosmic Latte", "Amaranth", "Chartreuse", "Coquelicot", "Celadon"]
-            self.colors = open(os.path.join("resources", "colors.txt")).readlines()
-        except:
-            print("File \"" + str(os.path.join("resources", "colors.txt")) + "\" not found.")
-            sys.exit(0)'''
 
 
     def runner(self):
@@ -46,11 +38,4 @@ class ShowPicker:
 
 
 if __name__ == "__main__":
-    # sp_cls = show_picker()
     ShowPicker().runner()
-
-# Pick a color:
-#	Glaucous
-#	Amaranth
-#	Chartreuse
-#	Cosmic Latte
