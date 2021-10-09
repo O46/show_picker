@@ -1,0 +1,253 @@
+if author_id initiates a roll (if roll in message)
+	author_db_entry = check_roll_profile(author_id)
+	text = message.content.split(" ", 1)
+	any_number = re.findall(r'\d+', text)
+
+	guaranteed_rank = false
+	guaranteed_numb = none
+	guaranteed_holo = false
+	guaranteed_new = false
+
+	if len(number) > 0:
+		guaranteed_rank = true
+		guaranteed_numb = number
+
+		if "h" in text:
+			guaranteed_holo = true
+
+		if "n" in text:
+			guaranteed_new = true
+
+	call self.roll_handler(author_id, author_db_entry, guaranteed_rank, guaranteed_numb, guaranteed_new, guaranteed_holo)
+
+
+check_roll_profile | author_id
+	if user is not already in the db
+		create user db entry
+			needed values:
+				n1 - n7 		int 0
+				n1n - n7n		list ['filler']
+				reroll_allow	int 1
+				n1l - n7l       dict {"1s": {"10": [5, 10], "15": [8, 13], "20": [11, 16], "25": [15, 20]}, "2s":  {"10": [5, 10]}}
+				n1nl - n7nl		dict {"1s": {"10": [5, 10], "15": [8, 13], "20": [11, 16], "25": [15, 20]}, "2s":  {"10": [5, 10]}}
+				check_in 		list [0, 0, 0]
+				cooldown        int 600
+				n_count			int 0
+				h_count			int 0
+				r_count			int 0
+				dust			int 0
+				bronze			int 70
+				silver			int 50
+				gold			int 30
+				platinum		int 15
+				iridium			int 4
+				mythril			double 1.5
+				holographic		double 0.5
+		return author_db_entry (db.get(query[user]==author_id))
+
+
+roll_handler | author_id, author_db_entry, guaranteed_rank, guaranteed_numb, guaranteed_new, guaranteed_holo
+	if any value in check_in is valid using user[cooldown_timer]
+		set_roll_timer = True
+
+		if guaranteed_rank or guaranteed_new or guaranteed_holo:
+			dust_submission = ""
+			set_roll_timer = False
+			if guaranteed_rank:
+				dust_submission = dust_submission + guaranteed_numb
+			if guaranteed_new:
+				dust_submission = dust_submission + "n"
+			if guaranteed_holo:
+				dust_submission = dust_submission + "h"
+			if user[dust] < roll_cost_dict[dust_submission]:
+				print("You need {0} more dust to perform a {1} roll.".format(roll_cost_dict[dust_submission]-user[dust], dist_submission))
+				return
+			else:
+				user[dust].update(user[dust] - cost_dict[dust_submission])
+				set_roll_timer = False
+		else:
+			if random.randint(1, 500) = 1:
+				print("You got a free roll refresh!")  # @author
+				set_roll_timer = False
+
+		if set_roll_timer:
+			upd_time = author_db_entry.get('check_in')
+			upd_time.remove(min(upd_time))
+			upd_time.append(int(time.time()))
+
+		card = []
+		times_rolled = 0
+		breaker_value = false
+		values = {
+				"bronze": author_db_entry.get('bronze')
+				"silver": author_db_entry.get('silver')
+				"gold": author_db_entry.get('gold')
+				"platinum": author_db_entry.get('platinum')
+				"iridium": author_db_entry.get('iridium')
+				"mythril": author_db_entry.get('mythril')
+				"holographic": author_db_entry.get('holographic')
+			}
+
+
+		if guaranteed_rank:
+			values = {bronze: 0, silver: 0, gold: 0, platinum: 0, iridium: 0, mythril: 0, "holographic": holographic}
+			values[guaranteed_numb].update("100")
+		if_guaranteed_holo:
+			values["holographic"].update(250)
+
+
+		while times_rolled is below reroll_allow and breaker_value is false:
+			chance = values["bronze + values["silver"] + values["gold"] + values["platinum"] + values["iridium"] + values["mythril"]
+			card_tier, card_tier_name, holo_status = rarity_roller(author_id, author_db_entry, values, guaranteed_new, chance, guaranteed_numb)
+			card_name, card_loc, rare_lvl, new, this_rarity_count, my_count = card_builder(card_tier, card_tier_name, holo_status)
+			times_rolled += 1
+			if new:
+				breaker_value = True
+	else
+		respond with user's time to roll
+
+
+rarity_updater | author_db_entry, guaranteed_numb, guaranteed_holo, star_result
+	if not guaranteed_numb:
+		print()
+		if star_result != 3:
+			star_result = author_db_entry["gold"] = itself + itself * low value
+		else:
+			star_result = author_db_entry["gold"] = author_db_entry["gold_baseline"]
+		if star_result != 4:
+			star_result = author_db_entry["platinum"] = itself + itself * low value
+		else:
+			star_result = author_db_entry["platinum"] = author_db_entry["platinum_baseline"]
+		if star_result != 5:
+			star_result = author_db_entry["iridium"] = itself + itself * low value
+		else:
+			star_result = author_db_entry["iridium"] = author_db_entry["iridiumbaseline"]
+		if star_result != 6:
+			star_result = author_db_entry["mythril"] = itself + itself * low value
+		else:
+			star_result = author_db_entry["mythril"] = author_db_entry["mythril_baseline"]
+
+	#if not guaranteed_new:
+	if not guaranteed_holo:
+		if holo:
+			author_db_entry["holographic"] = author_db_entry["holographic_baseline"]
+		else:
+			author_db_entry["holographic"] = author_db_entry["holographic"] + author_db_entry * low value
+
+
+rarity_roller | author_id, author_db_entry, values, guaranteed_new, chance, seven=1, holo=False, guaranteed_numb=False
+	choice = random(1, round(chance) + seven)
+
+	if not holo:
+		if random.randint(0, 250) < values["holographic"]
+			holo = True
+		else
+			holo = False
+
+	bronze = values["bronze"]
+	silver = values["bronze"] + bronze
+	gold = values["gold"] + silver
+	platinum = values["platinum"] + gold
+	iridium = values["iridium"] + platinum
+	mythril = values["mythril"] + iridium
+
+	if choice <= bronze:
+        return "n1", "One Star ", holo
+    elif choice <= silver:
+        return "n2", "Two Star ", holo
+    elif choice <= gold:
+        return "n3", "Three Star ", holo
+    elif choice <= platinum:
+        return "n4", "Four Star ", holo
+    elif choice <= iridium:
+        return "n5", "Five Star ", holo
+    elif choice <= mythril:
+        return "n6", "Six Star ", holo
+    else:
+        return "h7", "Seven Star ", True
+
+
+card_builder | card_tier, card_tier_name, holo_status, guaranteed_new
+        this_img = {"rarity": rare_lvl, "rare_name": rare_name, "over_img": False, "char_img": None, "name": None}
+        mod - "n"
+
+        if holo:
+            rare_lvl = "h" + rare_lvl[1]
+            this_img.update({'rarity': "h" + this_img['rarity'][1]})
+            mod = "h"
+        if guaranteed_new:
+        	this_img.update({"char_img": random.choice(x for x in os.listdir(os.path.join(assets, rare_lvl)) if x not in author_db_entry[mod + rare_lvl])})
+        else:
+	        this_img.update({"char_img": random.choice(os.listdir(os.path.join(assets, rare_lvl)))})
+        this_rarity_count = len(os.listdir(os.path.join(assets, rare_lvl)))
+        this_img['name'] = this_img["rare_name"] + this_img["char_img"].split(".")[0]
+        author_db_entry = eo_af_db.get(query['user'] == author_id)
+
+        got_list = author_db_entry.get(rare_lvl + "n")
+        if got_list == None:
+            got_list = []
+
+        new = False
+        dupe_dust = 0
+        if this_img['name'] not in got_list:
+            got_list.append(this_img['name'])
+            type_det = "n_count"
+            if holo:
+                type_det = "h_count"
+            type_count = author_db_entry.get(type_det) + 1
+            new = True
+        else:
+            if rare_lvl[0] == "n":
+                dupe_dust = 3
+            else:
+                dupe_dust = 12
+            og_dust = int(author_db_entry.get('dust'))
+            dupe_dust = (dupe_dust +  random.randint((dupe_dust * -.5, 4) * int(rare_lvl[1]) + og_dust)
+            print("You already had a ", this_img['name'])
+
+        return this_img['name'], this_img['char_img'], rare_lvl, new, this_rarity_count, len(got_list[1:])
+
+
+
+NEW = eo_af_db.update({rare_lvl + "n": got_list, type_det: type_count}, query['user'] == author_id)
+OLD = eo_af_db.update({'dust': dupe_dust}, query['user'] == author_id)
+
+n
+h
+nh
+
+1 = "7",
+1n = "130",
+1h = "110",
+1nh = "1935",
+
+2 = "14",
+2n = "260",
+2h = "215",
+2nh = "2885",
+
+3 = "22",
+3n = "390",
+3h = "325",
+3nh = "5820",
+
+4 = "29",
+4n = "520",
+4h = "430",
+4nh = "7770",
+
+5 = "36",
+5n = "650",
+5h = "540",
+5nh = "9720",
+
+6 = "43",
+6n = "777",
+6h = "650",
+6nh = "11655"
+
+
+
+
+server = 336266687517163520
+channel = 799058984815689778
