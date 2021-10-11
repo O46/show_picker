@@ -1,24 +1,24 @@
 if author_id initiates a roll (if roll in message)
 	author_db_entry = check_roll_profile(author_id)
-	text = message.content.split(" ", 1)
-	any_number = re.findall(r'\d+', text)
+    text = message.split(" ", 1)[0]
+    any_number = re.findall(r'\d+', text)
 
-	guaranteed_rank = false
-	guaranteed_numb = none
-	guaranteed_holo = false
-	guaranteed_new = false
+    guaranteed_rank = False
+    guaranteed_numb = None
+    guaranteed_holo = False
+    guaranteed_new = False
 
-	if len(number) > 0:
-		guaranteed_rank = true
-		guaranteed_numb = number
+    if len(any_number) > 0:
+        guaranteed_rank = True
+        guaranteed_numb = any_number
 
-		if "h" in text:
-			guaranteed_holo = true
+        if "h" in text:
+            guaranteed_holo = True
 
-		if "n" in text:
-			guaranteed_new = true
+        if "n" in text:
+            guaranteed_new = True
 
-	call self.roll_handler(author_id, author_db_entry, guaranteed_rank, guaranteed_numb, guaranteed_new, guaranteed_holo)
+	    call self.roll_handler(author_id, author_db_entry, guaranteed_rank, guaranteed_numb, guaranteed_new, guaranteed_holo)
 
 
 check_roll_profile | author_id
